@@ -40,8 +40,17 @@ public class Main {
         System.out.println("-게시물 상세보기-");
 
         Article lastArticle = articles.get(lastId-1); //lastId에 의거해서 마지막 게시판 정보 불러오기
-
         System.out.printf("번호 : %d \n제목 : %s \n내용 : %s\n", lastArticle.id, lastArticle.title, lastArticle.content);
+      } else if(cmd.equalsIgnoreCase("list")){
+        System.out.println("-게시물 리스트-");
+        System.out.println("---------------");
+        System.out.println("번호 / 제목");
+
+        for(Article article : articles){ //articles에 저장된 article객체를 향상된 for문으로 불러내어 출력
+          System.out.printf("%d / %s\n", article.id, article.title);
+        }
+
+        System.out.println("---------------");
       }
 
       else {
