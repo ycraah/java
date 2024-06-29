@@ -1,10 +1,7 @@
 package com.ycraah.javaboard;
 
-import jdk.jshell.execution.Util;
-
-import java.util.*;
+import java.util.*; //최상단에 없으면 오류 발생
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Main {
   public static void main(String[] args) {
@@ -19,6 +16,7 @@ public class Main {
       System.out.print("명령) ");
       String cmd = sc.nextLine();
       Rq rq = new Rq(cmd); //Url 파싱을 위한 Rq 객체 형성
+
 
       if(rq.getUrlPath().equalsIgnoreCase("write")){
         System.out.println("게시물 등록");
@@ -111,43 +109,45 @@ class Rq {
   Map<String, String> params;
   String urlPath;
 
-  public Rq(String url) {
-    this.url = url; // ex) datail?page=2&searchKeyword=안녕? 나는
-    params = Util.getParamsFromUrl(this.url); //[0] (page, 2) [1] (searchKeyword, 안녕? 나는)
-    urlPath = Util.getUrlPathFromUrl(this.url); //detail
+  Rq(String url) {
+    this.url = url; // ex) detail?page=2&searchKeyword=안녕? 나는
+    params = Util.getParamsFromUrl(url); //[0] (page, 2) [1] (searchKeyword, 안녕? 나는)
+    urlPath = Util.getUrlPathFromUrl(url); //detail
   }
 
   public String getUrlPath(){ //detail
-    return Util.getUrlPathFromUrl(url);
+    return url;
   }
 
   public Map<String, String> getParams(){ //[0] (page, 2) [1] (searchKeyword, 안녕? 나는)
-    return Util.getParamsFromUrl(url);
-  }
-  class Util{
-    static String getUrlPathFromUrl(String url){ // ex) datail?page=2&searchKeyword=안녕? 나는
-      return url.split("\\?", 2)[0]; //detail
-    }
-
-    static Map<String, String> getParamsFromUrl(String url){
-      Map<String, String> params = new HashMap<>();
-      String[] urlBits = url.split("\\?", 2); //[0]detail [1]page=2&searchKeyword=안녕? 나는
-
-      if(urlBits.length == 1){
-        return params;
-      }
-
-      String queryStr = urlBits[1]; //page=2&searchKeyword=안녕? 나는
-      for(String bit : queryStr.split("&")){ //[0]page=2 [1]searchKeyword=안녕? 나는
-        String[] bits = bit.split("=", 2); //[0]page [1]2 //[0]searchKeyword [1]안녕? 나는
-
-        if(bits.length == 1){
-          continue;
-        }
-        params.put(bits[0], bits[1]); //(page, 2)를 세트로 묶어서 params에 저장
-      }
-      return params; //[0] (page, 2) [1] (searchKeyword, 안녕? 나는)
-    }
+    return params;
   }
 }
+
+class Util{
+  static String getUrlPathFromUrl(String url){ // ex) datail?page=2&searchKeyword=안녕? 나는
+    return url.split("\\?", 2)[0]; //detail
+  }
+
+  static Map<String, String> getParamsFromUrl(String url){
+    Map<String, String> params = new HashMap<>();
+    String[] urlBits = url.split("\\?", 2); //[0]detail [1]page=2&searchKeyword=안녕? 나는
+
+    if(urlBits.length == 1){
+      return params;
+    }
+
+    String queryStr = urlBits[1]; //page=2&searchKeyword=안녕? 나는
+    for(String bit : queryStr.split("&")){ //[0]page=2 [1]searchKeyword=안녕? 나는
+      String[] bits = bit.split("=", 2); //[0]page [1]2 //[0]searchKeyword [1]안녕? 나는
+
+      if(bits.length == 1){
+        continue;
+      }
+      params.put(bits[0], bits[1]); //(page, 2)를 세트로 묶어서 params에 저장
+    }
+    return params; //[0] (page, 2) [1] (searchKeyword, 안녕? 나는)
+  }
+}
+
 
