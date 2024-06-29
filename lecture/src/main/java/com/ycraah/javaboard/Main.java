@@ -9,7 +9,7 @@ public class Main {
     Scanner sc = new Scanner(System.in);
     List<Article> articles = new ArrayList<>(); //게시물 번호, 제목, 내용를 담은 객체 articles
 
-    IntStream.rangeClosed(1, 3).forEach(
+    IntStream.rangeClosed(1, 100).forEach(
         i -> articles.add(new Article("테스트 제목" + i, "테스트 내용" + i, i))); //test용 데이터
 
     while(true){ //명령어 무한 입력을 위한 반복문
@@ -17,8 +17,7 @@ public class Main {
       String cmd = sc.nextLine();
       Rq rq = new Rq(cmd); //Url 파싱을 위한 Rq 객체 형성
 
-
-      if(rq.getUrlPath().equalsIgnoreCase("write")){
+      if(rq.urlPath.equalsIgnoreCase("write")){
         System.out.println("게시물 등록");
         System.out.print("제목) ");
         String title = sc.nextLine();
@@ -43,18 +42,23 @@ public class Main {
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
         System.out.println(article.toString());
 
-      } else if(rq.getUrlPath().equalsIgnoreCase("detail")){
+      } else if(rq.urlPath.equalsIgnoreCase("detail")){
+        System.out.println("-게시물 상세보기-");
         if(articles.isEmpty()){
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
         }
 
-        System.out.println("-게시물 상세보기-");
-        int lastId = articles.size() + 1; //최근 게시물 번호
-        Article lastArticle = articles.get(lastId-1); //lastId에 의거해서 마지막 게시물 정보 불러오기
-        System.out.printf("번호 : %d \n제목 : %s \n내용 : %s\n", lastArticle.id, lastArticle.title, lastArticle.content);
+        int detailId = articles.size(); //최근 게시물 번호
 
-      } else if(rq.getUrlPath().equalsIgnoreCase("list")){
+        if(rq.getParams().containsKey("id")){
+          detailId = Integer.parseInt(rq.getParams().get("id"));
+        }
+
+        Article detailArticle = articles.get(detailId -1); //lastId에 의거해서 마지막 게시물 정보 불러오기
+        System.out.printf("번호 : %d \n제목 : %s \n내용 : %s\n", detailArticle.id, detailArticle.title, detailArticle.content);
+
+      } else if(rq.urlPath.equalsIgnoreCase("list")){
         if(articles.isEmpty()){
           System.out.println("게시물이 없습니다.");
           continue;
@@ -73,7 +77,7 @@ public class Main {
         }
         System.out.println("---------------");
 
-      } else if(rq.getUrlPath().equalsIgnoreCase("exit")) {
+      } else if(rq.urlPath.equalsIgnoreCase("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
 
