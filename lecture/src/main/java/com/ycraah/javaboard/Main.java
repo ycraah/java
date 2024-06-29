@@ -25,7 +25,7 @@ public class Main {
         System.out.print("내용) ");
         String content = sc.nextLine();
         Article article = new Article(title, content, id); // 게시판 정보를 담은 article 형성
-        articles.add(article); //article을 articles에 저장
+        articles.add(article); //articles에 article을 저장
 
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
         System.out.println(article.toString());
@@ -46,10 +46,13 @@ public class Main {
         System.out.println("---------------");
         System.out.println("번호 / 제목");
 
-        for(Article article : articles){ //articles에 저장된 article객체를 향상된 for문으로 불러내어 출력
+       /* for(Article article : articles) {//articles에 저장된 내용을 article객체에 저장하여 for문으로 불러내어 출력
+          System.out.printf("%d / %s\n", article.id, article.title);
+        } 순차 출력*/
+        for(int i = articles.size()-1; i >= 0; i--) { //Arraylist는 배열 길이를 size()로 확인!!
+          Article article = articles.get(i);
           System.out.printf("%d / %s\n", article.id, article.title);
         }
-
         System.out.println("---------------");
       }
 
