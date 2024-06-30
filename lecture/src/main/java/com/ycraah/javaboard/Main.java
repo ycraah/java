@@ -43,19 +43,27 @@ public class Main {
         System.out.println(article.toString());
 
       } else if(rq.urlPath.equalsIgnoreCase("detail")){
-        System.out.println("-게시물 상세보기-");
         if(articles.isEmpty()){
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
         }
 
-        int detailId = articles.size(); //최근 게시물 번호
-
-        if(rq.getParams().containsKey("id")){
-          detailId = Integer.parseInt(rq.getParams().get("id"));
+        if(!rq.params.containsKey("id")){
+          System.out.println("id를 입력해주세요.");
+          continue;
         }
 
-        Article detailArticle = articles.get(detailId -1); //lastId에 의거해서 마지막 게시물 정보 불러오기
+        int id = 0;
+
+          try{
+            id = Integer.parseInt(rq.params.get("id"));
+          } catch(NumberFormatException e){
+            System.out.println("id를 정수 형태로 입력해주세요");
+            continue;
+        }
+
+        System.out.println("-게시물 상세보기-");
+        Article detailArticle = articles.get(id - 1);
         System.out.printf("번호 : %d \n제목 : %s \n내용 : %s\n", detailArticle.id, detailArticle.title, detailArticle.content);
 
       } else if(rq.urlPath.equalsIgnoreCase("list")){
