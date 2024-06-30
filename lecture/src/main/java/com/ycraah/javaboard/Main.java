@@ -55,7 +55,7 @@ public class Main {
 
         int id = 0;
 
-          try{
+          try{ //유효성 검사
             id = Integer.parseInt(rq.params.get("id"));
           } catch(NumberFormatException e){
             System.out.println("id를 정수 형태로 입력해주세요");
@@ -72,17 +72,35 @@ public class Main {
           continue;
         }
 
+        boolean orderByIdDesc = true;
+
+        if(rq.params.containsKey("orderBy")){ //orderBy가 있을 시
+          if(rq.params.get("orderBy").equals("idAsc"))
+            orderByIdDesc = true;
+          else if(rq.params.get("orderBy").equals("Desc"))
+            orderByIdDesc = false;
+          else{
+            System.out.println("올바르지 않은 정렬 방식입니다.");
+            continue;
+          }
+        } else { //orderBy가 없을 시
+          System.out.println("정렬 방식을 입력해주세요");
+          continue;
+        }
+
         System.out.println("-게시물 리스트-");
         System.out.println("---------------");
         System.out.println("번호 / 제목");
 
-       /* for(Article article : articles) {//articles에 저장된 내용을 article객체에 저장하여 for문으로 불러내어 출력
-          System.out.printf("%d / %s\n", article.id, article.title);
-        } 순차 출력*/
-        for(int i = articles.size()-1; i >= 0; i--) { //Arraylist는 배열 길이를 size()로 확인!!
-          Article article = articles.get(i);
-          System.out.printf("%d / %s\n", article.id, article.title); //역순 출력
+        if(orderByIdDesc){
+          for(Article article : articles) {
+            System.out.printf("%d / %s\n", article.id, article.title);} //정순순회
+        } else {
+          for(int i = articles.size()-1; i >= 0; i--) { //Arraylist는 배열 길이를 size()로 확인!!
+            Article article = articles.get(i);
+            System.out.printf("%d / %s\n", article.id, article.title);} //역순순회
         }
+
         System.out.println("---------------");
 
       } else if(rq.urlPath.equalsIgnoreCase("exit")) {
