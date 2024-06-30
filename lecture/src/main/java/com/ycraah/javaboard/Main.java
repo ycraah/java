@@ -74,13 +74,26 @@ public class Main {
 
         boolean orderByIdDesc = true;
 
-        if(rq.params.containsKey("orderBy")){ //orderBy가 있을 시
+        if(rq.params.containsKey("orderBy")){ //orderBy는 정렬
           if(rq.params.get("orderBy").equals("idAsc"))
             orderByIdDesc = true;
           else if(rq.params.get("orderBy").equals("Desc"))
             orderByIdDesc = false;
           else{
             System.out.println("올바르지 않은 정렬 방식입니다.");
+            continue;
+          }
+        } else if(rq.params.containsKey("searchKeyword")) { //searchKeyword 입력 시 검색
+          String searchKeyword = rq.params.get("searchKeyword");
+          if(searchKeyword != ""){
+            System.out.println("번호 / 제목");
+            for(Article article : articles){
+              if(article.title.contains(searchKeyword) || article.content.contains(searchKeyword)){
+                System.out.printf("%d / %s\n", article.id, article.title);}
+              }
+              continue;
+            } else {
+            System.out.println("검색할 키워드를 입력하세요.");
             continue;
           }
         } else { //orderBy가 없을 시
@@ -100,7 +113,6 @@ public class Main {
             Article article = articles.get(i);
             System.out.printf("%d / %s\n", article.id, article.title);} //역순순회
         }
-
         System.out.println("---------------");
 
       } else if(rq.urlPath.equalsIgnoreCase("exit")) {
